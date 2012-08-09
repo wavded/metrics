@@ -16,6 +16,7 @@ var Histogram = module.exports = function Histogram(sample) {
   this.varianceM = null;
   this.varianceS = null;
   this.count = 0;
+  this.last = null;
   this.type = 'histogram';
 }
 
@@ -27,11 +28,13 @@ Histogram.prototype.clear = function() {
   this.varianceM = null;
   this.varianceS = null;
   this.count = 0;
+  this.last = null;
 }
 
 // timestamp param primarily used for testing
 Histogram.prototype.update = function(val, timestamp) {
   this.count++;
+  this.last = val;
   this.sample.update(val, timestamp);
   if (this.max === null) {
     this.max = val;
@@ -110,6 +113,7 @@ Histogram.prototype.printObj = function() {
     , mean: this.mean()
     , std_dev: this.stdDev()
     , count: this.count
+    , last: this.last
     , median: percentiles[0.5]
     , p75: percentiles[0.75]
     , p95: percentiles[0.95]
